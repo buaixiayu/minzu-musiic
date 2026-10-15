@@ -646,6 +646,7 @@ tr:hover .td-act{opacity:1}
 <symbol id="i-arrow-l" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
 <symbol id="i-arrow-r" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
 <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.7v.01"/></symbol>
 </svg>
 
 <div id="app">
@@ -672,6 +673,8 @@ tr:hover .td-act{opacity:1}
       <div class="nav-title">导入的歌单</div>
       <div class="nav-item" id="nav-import"><svg class="ic" style="color:#0ea5e9"><use href="#i-import"/></svg><span class="grow">导入歌单...</span></div>
       <div id="custom-playlists"></div>
+      <div class="nav-title">关于</div>
+      <div class="nav-item" data-page="about"><svg class="ic" style="color:#c20c0c"><use href="#i-info"/></svg><span class="grow">关于山河回响</span></div>
     </nav>
     <div class="side-foot">
       <button id="btn-settings"><svg class="ic sm"><use href="#i-gear"/></svg>音源设置</button>
@@ -907,6 +910,92 @@ tr:hover .td-act{opacity:1}
           </div>
         </div>
       </div>
+
+      <!-- ============ 关于 / 品牌页 ============ -->
+      <div class="page" id="page-about">
+        <style>
+          #page-about .ab-wrap{max-width:920px;margin:0 auto}
+          #page-about .ab-logo{display:inline-flex;align-items:center;gap:11px;margin:2px 0 16px}
+          #page-about .ab-logo .lic{width:42px;height:42px;border-radius:11px;background:var(--red-grad);display:grid;place-items:center;box-shadow:0 4px 12px rgba(194,12,12,.35)}
+          #page-about .ab-logo .lic svg{width:23px;height:23px;fill:#fff;stroke:none}
+          #page-about .ab-logo b{font-size:19px;letter-spacing:.5px}
+          #page-about .ab-logo small{display:block;font-size:11px;color:var(--txt3);margin-top:1px}
+          #page-about .hero .hot{margin-top:4px}
+          #page-about .ab-lead{font-size:14px;line-height:1.95;color:var(--txt2);margin:4px 0 2px}
+          #page-about .ab-lead b{color:var(--txt);font-weight:600}
+          #page-about .ab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:14px;margin-top:6px}
+          #page-about .ab-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--sh-1);transition:transform .18s var(--ease),box-shadow .18s var(--ease),border-color .18s var(--ease)}
+          #page-about .ab-card:hover{transform:translateY(-3px);box-shadow:var(--sh-3);border-color:#f0d3d3}
+          #page-about .ab-card .ic{width:30px;height:30px;color:#fff;background:var(--red-grad);border-radius:9px;padding:6px;box-shadow:0 3px 10px rgba(194,12,12,.3)}
+          #page-about .ab-card h4{font-size:14px;margin:13px 0 5px}
+          #page-about .ab-card p{font-size:12.5px;color:var(--txt2);line-height:1.7}
+          #page-about .ab-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px}
+          #page-about .ab-stat{background:linear-gradient(135deg,#fff,#fbf3f3);border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center}
+          #page-about .ab-stat .n{font-size:30px;font-weight:800;background:var(--red-grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-variant-numeric:tabular-nums;line-height:1.1}
+          #page-about .ab-stat .l{font-size:12.5px;color:var(--txt2);margin-top:6px}
+          #page-about .ab-quote{background:linear-gradient(115deg,#8f5e0d,#c9962c 40%,#7a1f1f);border-radius:16px;padding:24px 28px;color:#fff;position:relative;overflow:hidden;margin-top:4px}
+          #page-about .ab-quote::after{content:'';position:absolute;right:-50px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(255,220,140,.22),transparent 65%)}
+          #page-about .ab-quote h3{font-size:16px;margin-bottom:8px;position:relative;z-index:1}
+          #page-about .ab-quote p{font-size:13px;opacity:.92;line-height:1.85;position:relative;z-index:1;max-width:660px}
+          #page-about .ab-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+          #page-about .ab-foot{margin-top:30px;padding-top:16px;border-top:1px solid var(--line);color:var(--txt3);font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+        </style>
+        <div class="ab-wrap">
+          <!-- 品牌横幅 -->
+          <div class="hero">
+            <div class="ab-logo">
+              <div class="lic"><svg viewBox="0 0 24 24"><use href="#i-note"/></svg></div>
+              <div><b>山河回响</b><small>Mountain River Echoes · 听见 56 个民族的音乐</small></div>
+            </div>
+            <p style="margin-bottom:14px">一个基于多音源聚合的 56 民族音乐听歌平台。我们为每一个少数民族构建专属歌单，让民歌、特色曲种与民族语言歌曲，重新在耳边回响。</p>
+            <div class="hot">
+              <span>聚合搜索</span><span>歌词试听</span><span>一键下载</span><span>56 民族歌单</span><span>本地曲库</span>
+            </div>
+          </div>
+
+          <!-- 关于本项目 -->
+          <div class="sec-title"><b>关于本项目</b></div>
+          <p class="ab-lead">山河回响（Mountain River Echoes）源自对 <b>CharlesPikachu/musicdl</b> 的本地化改造，是一个面向民族音乐爱好者与研究者的一站式听歌平台。它聚合多家主流音源、自动遍历检索，为 <b>56 个少数民族</b>逐一整理出民族音乐歌单——涵盖民歌、特色曲种与民族语言歌曲，并支持歌词、试听与本地下载。</p>
+
+          <!-- 核心能力 -->
+          <div class="sec-title"><b>核心能力</b></div>
+          <div class="ab-grid">
+            <div class="ab-card"><svg class="ic"><use href="#i-search"/></svg><h4>聚合多音源搜索</h4><p>同时检索多家音源，结果按音源聚合呈现，覆盖更广的曲库。</p></div>
+            <div class="ab-card"><svg class="ic"><use href="#i-note"/></svg><h4>56 民族歌单</h4><p>为 56 个少数民族构建专属民族音乐歌单，点击即听。</p></div>
+            <div class="ab-card"><svg class="ic"><use href="#i-lyric"/></svg><h4>歌词与试听</h4><p>在线试听、同步歌词，沉浸感受每个民族的音乐表达。</p></div>
+            <div class="ab-card"><svg class="ic"><use href="#i-download"/></svg><h4>一键下载</h4><p>多音源择优下载，自动归入本地曲库与下载管理。</p></div>
+            <div class="ab-card"><svg class="ic"><use href="#i-folder"/></svg><h4>本地音乐</h4><p>管理已下载的本地文件，构建真正属于自己的民族音乐盒。</p></div>
+            <div class="ab-card"><svg class="ic"><use href="#i-import"/></svg><h4>歌单导入</h4><p>粘贴网易云 / QQ音乐 / 汽水音乐歌单链接，一键导入收藏。</p></div>
+          </div>
+
+          <!-- 数字一览 -->
+          <div class="sec-title"><b>数字一览</b></div>
+          <div class="ab-stats">
+            <div class="ab-stat"><div class="n">56</div><div class="l">个民族专属曲库</div></div>
+            <div class="ab-stat"><div class="n">6+</div><div class="l">聚合音源平台</div></div>
+            <div class="ab-stat"><div class="n">100%</div><div class="l">本地部署 · 隐私可控</div></div>
+          </div>
+
+          <!-- 项目背景 -->
+          <div class="ab-quote">
+            <h3>项目背景</h3>
+            <p>山河回响是云南大学民族学与社会学学院「AI 与社会科学」课程的实践成果。我们以民族音乐为切入点，探索人工智能如何服务于人文社科的田野资料整理、文化传承与可计算研究。</p>
+          </div>
+
+          <!-- 技术栈与致谢 -->
+          <div class="sec-title"><b>技术栈与致谢</b></div>
+          <p class="ab-lead">后端基于 <b>Python + Flask</b>，检索能力依托 <b>musicdl</b>（CharlesPikachu 开源项目）的本地化改造；民族曲库由课程团队整理。感谢各音乐平台提供的公开音源，以及所有为民族音乐数字化付出努力的研究者与爱好者。</p>
+          <div class="ab-tags">
+            <span class="tag sq">Python</span><span class="tag sq">Flask</span><span class="tag sq">musicdl</span><span class="tag hq">本地曲库</span><span class="tag mv">AI × 社会科学</span>
+          </div>
+
+          <div class="ab-foot">
+            <span>山河回响 · Mountain River Echoes</span>
+            <span>云南大学民社学院「AI 与社会科学」课程成果</span>
+          </div>
+        </div>
+      </div>
+
     </section>
   </main>
 
