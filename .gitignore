@@ -120,3 +120,19 @@ probe_weixin*.py
 # 本地工具会话数据(ZCode / WorkBuddy)
 .zcode/
 .workbuddy/
+
+# 一次性调试/临时脚手架(曲库人工清理与音源调试期产物, _ 前缀为本仓库临时文件约定)
+_*.py
+_*.json
+_*.err
+_*.txt
+*.bak
+*.bak.*
+download_results.pkl
+mtest_out.txt
+e50_dump.txt
+test_dl*.py
+fetch_ffmpeg_tmp.py
+# 仫佬族检索管线中间产物(可由 webui/search_mulao.py 重新生成)
+webui/mulao_search_raw.json
+webui/mulao_new_candidates.json
