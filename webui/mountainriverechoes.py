@@ -547,6 +547,12 @@ ETHNOS_CACHE_DIR.mkdir(parents=True, exist_ok=True)
 SINGER_CACHE_DIR = ETHNOS_CACHE_DIR / 'singers'
 SINGER_CACHE_DIR.mkdir(parents=True, exist_ok=True)
 SINGER_MAX_SONGS = 300
+
+
+def _denylist_path(group_key):
+    """手动剔除名单(sidecar): 与 e*.json 同目录, 用 _denylist 后缀, 避免被曲库全量扫描误食。
+    重建时跳过这些曲目, 使人工清理结果在自动重建后依然持久。"""
+    return ETHNOS_CACHE_DIR / f'{group_key}_denylist.json'
 # UI 态持久化: 卡片/歌手拖动次序、我的歌单、隐藏曲目、民族歌手增删名单等。
 # 刻意放在 webui/ 而非 ethnos_cache/ —— 后者会被 e*.json / han_*.json 的
 # 全量扫描(_iter_ethnos_tracks/_ethnos_files_sig)当作曲库文件吃掉。
@@ -788,6 +794,13 @@ def build_ethnos_playlist(group_key):
                                 if _prev is None or ((not _yt) and _prev_yt):
                                     merged[_k] = (_s, 1000)
                                     warm_keys.add(_k)
+        # 手动剔除名单: 重建时跳过这些被人工判定为非本民族的曲目(持久化清理结果)
+        denylist = set()
+        with suppress(Exception):
+            _dlp = _denylist_path(group_key)
+            if _dlp.exists():
+                _dl = json.loads(_dlp.read_text(encoding='utf-8'))
+                denylist = set(str(x).strip().lower() for x in (_dl if isinstance(_dl, list) else (_dl.get('songs') or [])))
         artist_seeds = set(ETHNIC_ARTISTS.get(info['name'], []))
         for kw_idx, kw in enumerate(info['kws']):
             if ethnos_stop.is_set():
@@ -796,6 +809,10 @@ def build_ethnos_playlist(group_key):
             is_artist = kw in artist_seeds
             for song in _search_ethnos_keyword(client, kw):
                 if not song.song_name:
+                    continue
+                # 人工剔除名单: 经判定不属于本民族的曲目, 重建时跳过, 使清理结果持久
+                _nm = (song.song_name or '').strip().lower()
+                if _nm in denylist or any(_d and len(_d) >= 4 and _d in _nm for _d in denylist):
                     continue
                 key = _dedup_key(song)
                 if not key.strip('|'):
@@ -959,11 +976,15 @@ for _g in ETHNIC_GROUPS:
     if (_cache_path(_g['key'])).exists():
         with suppress(Exception):
             _p = json.loads((_cache_path(_g['key'])).read_text(encoding='utf-8'))
-            if _p.get('v') == ETHNOS_SCHEMA and (_p.get('count') or 0) >= ETHNOS_MIN_VIABLE:
-                if _p.get('partial') and (_p.get('count') or 0) < ETHNOS_MAX_SONGS:
-                    ethnos_state[_g['key']] = {'state': 'idle', 'count': _p.get('count') or 0}
+            _cnt = (_p.get('count') or 0)
+            # 人工清理过的民族(存在剔除名单 sidecar)即便不足 MIN_VIABLE 也标记为 done,
+            # 避免首页显示「点击构建」、并在点击时误触发重建把已删曲目重新灌回
+            _has_denylist = _denylist_path(_g['key']).exists()
+            if _p.get('v') == ETHNOS_SCHEMA and _cnt > 0 and (_cnt >= ETHNOS_MIN_VIABLE or _has_denylist):
+                if _p.get('partial') and _cnt < ETHNOS_MAX_SONGS and not _has_denylist:
+                    ethnos_state[_g['key']] = {'state': 'idle', 'count': _cnt}
                 else:
-                    ethnos_state[_g['key']] = {'state': 'done', 'count': _p.get('count') or 0}
+                    ethnos_state[_g['key']] = {'state': 'done', 'count': _cnt}
 
 
 def _iter_ethnos_payload():
